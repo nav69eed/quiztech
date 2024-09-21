@@ -18,6 +18,10 @@
             </textarea>
                 <label class="c-s">Quiz Description</label>
             </div>
+            <div class="user-box">
+                <input type="number" name="time_limit" required min="0">
+                <label class="c-s">Time Limit (minutes)</label>
+            </div>
             <center>
                 <a class="c-s">
                     <button class="btn" type="submit">Create</button>

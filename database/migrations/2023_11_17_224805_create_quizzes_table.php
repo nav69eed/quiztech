@@ -12,7 +12,7 @@ class CreateQuizzesTable extends Migration
             $table->unsignedBigInteger('id')->primary();
             $table->string('title');
             $table->string('description');
-            $table->integer('allowed_time')->nullable();
+            $table->integer('time_limit'); // Add this line
             // Add other quiz fields as needed
             $table->timestamps();
         });

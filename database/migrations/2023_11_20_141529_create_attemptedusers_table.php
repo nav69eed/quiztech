@@ -18,7 +18,7 @@ class CreateAttemptedusersTable extends Migration
             $table->id();
             $table->foreignId('quiz_id')->constrained()->onDelete('cascade');
             $table->integer('attempts')->default(0);
-           // $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('bestScore')->default(0);
             $table->timestamps();
         });

@@ -43,6 +43,13 @@
 
 <body>
     <x-nav-bar-main :user="$user" />
+    
+    @if (Session::has('error'))
+        <div class="alert alert-danger mt-4">
+            {{ Session::get('error') }}
+        </div>
+    @endif
+
     @if (!Session::has('response'))
         <div class="mx-auto my-3 p-4 shadow  h6 quizdiv position-relative" id="quiztitle">
             <p class="c-a">
@@ -108,6 +115,9 @@
             </form>
         </div>
     </div>
+    @if (!Session::has('response'))
+        <div id="timer" class="text-center mt-3 h4"></div>
+    @endif
 </body>
 <script>
     btn = document.getElementById('quizstartbtn');
@@ -133,6 +143,42 @@
     btn.addEventListener('click', () => {
         quiz.style.display = 'flex';
         quiztitle.style.display = 'none';
+    });
+
+    // Add timer functionality
+    var timeLimit = {{ $quiz->time_limit * 60 }}; // Convert minutes to seconds
+    var timer = document.getElementById('timer');
+    var quizForm = document.querySelector('form');
+
+    function startTimer() {
+        var interval = setInterval(function() {
+            var minutes = Math.floor(timeLimit / 60);
+            var seconds = timeLimit % 60;
+            timer.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            
+            if (timeLimit <= 0) {
+                clearInterval(interval);
+                quizForm.submit();
+            }
+            timeLimit--;
+        }, 1000);
+    }
+
+    btn.addEventListener('click', () => {
+        quiz.style.display = 'flex';
+        quiztitle.style.display = 'none';
+        startTimer();
+    });
+
+    // Auto-submit when time runs out
+    setTimeout(() => {
+        if (!quizForm.classList.contains('submitted')) {
+            quizForm.submit();
+        }
+    }, {{ $quiz->time_limit * 60 * 1000 }});
+
+    quizForm.addEventListener('submit', function() {
+        this.classList.add('submitted');
     });
 </script>
 

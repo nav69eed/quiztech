@@ -48,6 +48,7 @@ Route::middleware(['authenticationcheck'])->group(function () {
     // Add more authenticated routes if needed
 });
 
+
 // Debug route to display quiz data
 Route::get('/quiz', function () {
     $id = 1;

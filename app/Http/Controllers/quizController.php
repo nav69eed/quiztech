@@ -22,24 +22,30 @@ class quizController extends Controller
     {
         $validator = Validator::make($req->all(), [
             'name' => 'required|min:4|max:30',
-            'descp' => 'required|min:10|max:100'
+            'descp' => 'required|min:10|max:100',
+            'time_limit' => 'required|integer|min:0'
         ]);
         if ($validator->fails()) {
             // return redirect('/login')->withErrors($validator)
             // ->withInput();
         }
 
-        $uuid = rand(0, 999999); // Adjust the range as needed
+        $timeLimit = (int) $req->time_limit;
+
+        $uuid = rand(0, 999999);
         while (DB::table('quizzes')->where('id', $uuid)->exists()) {
             // If not unique, generate a new random number
             $uuid = rand(0, 100000);
         }
         session(['quizID' => $uuid]);
-        $quiz = Quiz::create([
+
+        $quizdata = [[
+            'time_limit' => $req->time_limit,
             'title' => $req->name,
             'description' => $req->descp,
             'id' => $uuid,
-        ]);
+        ]];
+        $quiz = Quiz::insert($quizdata);
         return redirect('/createquiz');
     }
 
@@ -118,6 +124,18 @@ class quizController extends Controller
     // Processes a submitted quiz and calculates the score
     public function quizsubmit(Request $req, $id)
     {
+        $userId = session('loginID');
+        $quizId = $id;
+
+        // Check if the user has already attempted this quiz
+        $attemptedUser = AttemptedUser::where('quiz_id', $quizId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($attemptedUser) {
+            return back()->with('error', 'You have already attempted this quiz.');
+        }
+
         $quiz = Quiz::with('questions.options')->where('id', $id)->first();
         $response = [];
         $score = 0;
@@ -144,10 +162,13 @@ class quizController extends Controller
 
         // Add or update attempted user data
         AttemptedUser::updateOrInsert(
-            ['quiz_id' => $quizId], // condition to check if the record exists
             [
-                'bestScore' => DB::raw("GREATEST(bestScore, $score)"),
-                'attempts' => DB::raw('attempts + 1') // fields to update if it exists
+                'quiz_id' => $quizId,
+                'user_id' => $userId
+            ],
+            [
+                'bestScore' => DB::raw("GREATEST(COALESCE(bestScore, 0), $score)"),
+                'attempts' => DB::raw('COALESCE(attempts, 0) + 1')
             ]
         );
         return back()->with(['response' => $response, 'inpt' => $res]);

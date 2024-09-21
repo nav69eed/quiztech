@@ -12,8 +12,8 @@
             </p>
         </div>
         <div class="buttons mt-3">
-            <x-button-main :title="'Teacher'" :adress="'/login'" />
-            <x-button-main :title="'Student'" :adress="'/login'" />
+            <x-button-main :title="'Log In'" :adress="'/login'" />
+            <x-button-main :title="'Sign Up'" :adress="'/registration'" />
 
         </div>
 

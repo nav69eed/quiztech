@@ -16,23 +16,25 @@ class customAuthController extends Controller
         $validator = Validator::make($req->all(), [
             'name' => 'required|min:3|max:20',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:4|max:16'
+            'password' => 'required|min:4|max:16',
+            'role' => 'required|in:student,teacher'
         ]);
         if ($validator->fails()) {
             return redirect('/registration')->withErrors($validator)
                 ->withInput();
         }
 
-
         $picUrl = $req->input('pic') ?? 'https://cdn-icons-png.flaticon.com/512/6386/6386976.png';
-
-        $user = User::create([
+        $userData = [
             'name' => $req->name,
             'email' => $req->email,
             'password' => Hash::make($req->password),
             'pic' => $picUrl,
-        ]);
-
+            'role' => $req->role, // Ensure 'role' is included here
+        ];
+        
+        $user = User::create($userData);
+        
         if ($user) {
             $req->session()->put('loginID', $user->id);
             $intendedUrl = session('intended_url', '/home');
@@ -42,7 +44,6 @@ class customAuthController extends Controller
             return redirect('/registration')->with('fail', 'An Error Occurred');
         }
     }
-
 
     public function loginuser(Request $req)
     {

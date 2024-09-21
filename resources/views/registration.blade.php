@@ -15,32 +15,52 @@
                 </div>
             @endif
             @error('name')
-            <div class="alert alert-danger" role="alert" style="padding: 2px 5px; margin-top:3px;margin-bottom:-6px">
-                {{ $message }}
-            </div>
-        @enderror
+                <div class="alert alert-danger" role="alert" style="padding: 2px 5px; margin-top:3px;margin-bottom:-6px">
+                    {{ $message }}
+                </div>
+            @enderror
             <div class="input-group">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" placeholder="Enter Name">
             </div>
             @error('email')
-            <div class="alert alert-danger" role="alert" style="padding: 2px 5px; margin-top:10px;margin-bottom:-6px">
-                {{ $message }}
-            </div>
-        @enderror
+                <div class="alert alert-danger" role="alert" style="padding: 2px 5px; margin-top:10px;margin-bottom:-6px">
+                    {{ $message }}
+                </div>
+            @enderror
             <div class="input-group">
                 <label for="email">Email</label>
                 <input type="text" name="email" id="email" placeholder="Enetr Email">
             </div>
             @error('password')
-            <div class="alert alert-danger" role="alert" style="padding: 2px 5px; margin-top:10px;margin-bottom:-6px">
-                {{ $message }}
-            </div>
-        @enderror
+                <div class="alert alert-danger" role="alert" style="padding: 2px 5px; margin-top:10px;margin-bottom:-6px">
+                    {{ $message }}
+                </div>
+            @enderror
             <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" placeholder="Enter Password">
             </div>
+            <div class="my-2">
+                Your Role
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="role" id="roleStudent" value="student" required>
+                    <label class="form-check-label" for="roleStudent">
+                        Student
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="role" id="roleTeacher" value="teacher" required>
+                    <label class="form-check-label" for="roleTeacher">
+                        Teacher
+                    </label>
+                </div>
+            </div>
+            @error('role')
+                <div class="alert alert-danger" role="alert" style="padding: 2px 5px; margin-top:3px;margin-bottom:-6px">
+                    {{ $message }}
+                </div>
+            @enderror
             <button type="submit" class="mt-3 sign">Register</button>
         </form>
         <div class="social-message">
