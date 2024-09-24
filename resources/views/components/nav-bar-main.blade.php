@@ -44,7 +44,7 @@
             <div class="flex-wrap align-items-center justify-content-center justify-content-md-start d-flex">
                 <div class="mx-2">
                     <label for="switch" class="toggle">
-                        <input type="checkbox" class="input" id="switch" />
+                        <input type="checkbox" class="input" id="switch"/>
                         <div class="icon icon--moon">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 width="20" height="20">

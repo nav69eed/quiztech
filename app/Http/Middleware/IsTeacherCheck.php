@@ -4,8 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class LoginCheck
+class IsTeacherCheck
 {
     /**
      * Handle an incoming request.
@@ -16,13 +17,11 @@ class LoginCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        // Check if the session has a 'loginID' key, which indicates the user is logged in.
-        if (!(session()->has('loginID'))) {
-            // If the user is not logged in, proceed with the next middleware or request handler.
+        if (session('role') == 'teacher') {
             return $next($request);
-        } else {
-            // If the user is logged in, redirect them to the '/home' route.
-            return redirect('/home');
         }
+
+        // Return a proper response object instead of a string
+        return response("You are Not Teacher", 403); // 403 Forbidden status code
     }
 }

@@ -37,6 +37,7 @@ class customAuthController extends Controller
         
         if ($user) {
             $req->session()->put('loginID', $user->id);
+            $req->session()->put('role', $user->role); // Add role to session
             $intendedUrl = session('intended_url', '/home');
             session()->forget('intended_url'); // Clear the intended URL from the session
             return redirect($intendedUrl);
@@ -60,6 +61,7 @@ class customAuthController extends Controller
 
             if (Hash::check($req->password, $user->password)) {
                 $req->session()->put('loginID', $user->id);
+                $req->session()->put('role', $user->role); // Add role to session
                 $intendedUrl = session('intended_url', '/home');
                 session()->forget('intended_url'); // Clear the intended URL from the session
                 return redirect($intendedUrl);

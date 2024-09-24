@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use App\Http\Middleware\AuthCheck;
+use App\Http\Middleware\IsStudentCheck;
+use App\Http\Middleware\IsTeacherCheck;
 use App\Http\Middleware\LoginCheck;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -56,6 +58,8 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
+        'isstudentcheck'=>IsStudentCheck::class,
+        'isteachercheck' =>IsTeacherCheck::class,
         'authenticationcheck' => AuthCheck::class,
         'loginusercheck' => LoginCheck::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
@@ -67,5 +71,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
     ];
 }
