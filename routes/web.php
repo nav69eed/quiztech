@@ -47,7 +47,7 @@ Route::view('/', 'index');
 // Routes that require authentication
 Route::middleware(['authenticationcheck'])->group(function () {
     // Route to display the home page for authenticated users
-    Route::get('/home', [customAuthController::class, 'homepage']);
+    Route::get('/dashboard', [customAuthController::class, 'dashboard']);
     // Route to handle user logout
     Route::get('/logout', [customAuthController::class, 'logoutuser'])->name('logout');
 
@@ -95,7 +95,23 @@ Route::post('/quiz/submit/{id}', [quizController::class, 'quizsubmit'])->name('q
 
 
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-
-
-
+//Route::view('/dashboard', 'dashboard');

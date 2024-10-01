@@ -2,11 +2,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap");
 
 :root {
-    --primary: white;
-    --navbg: rgba(255, 255, 255, 0.75);
+    --primary-color:  #391560;
+    --primary: #F0F3F8;
     --secondary: #391560;
-    --action: #f77f00;
     --tertiary: #b12166;
+    --action: #f77f00;
+    --navbg: rgba(255, 255, 255, 0.75);
     --fontcolor: black;
     --tcolor: rgba(17, 24, 39, 1);
     --headingcolor: rgb(7, 10, 17);

@@ -32,13 +32,13 @@ class customAuthController extends Controller
             'pic' => $picUrl,
             'role' => $req->role, // Ensure 'role' is included here
         ];
-        
+
         $user = User::create($userData);
-        
+
         if ($user) {
             $req->session()->put('loginID', $user->id);
             $req->session()->put('role', $user->role); // Add role to session
-            $intendedUrl = session('intended_url', '/home');
+            $intendedUrl = session('intended_url', '/dashboard');
             session()->forget('intended_url'); // Clear the intended URL from the session
             return redirect($intendedUrl);
         } else {
@@ -62,10 +62,10 @@ class customAuthController extends Controller
             if (Hash::check($req->password, $user->password)) {
                 $req->session()->put('loginID', $user->id);
                 $req->session()->put('role', $user->role); // Add role to session
-                $intendedUrl = session('intended_url', '/home');
+                $intendedUrl = session('intended_url', '/dashboard');
                 session()->forget('intended_url'); // Clear the intended URL from the session
                 return redirect($intendedUrl);
-                // return redirect('/home');
+               
             } else {
                 return back()->with('fail', 'Password Incorrect. Try again !!');
             }
@@ -79,15 +79,21 @@ class customAuthController extends Controller
         $req->session()->pull('loginID');
         return redirect('/login')->with('success', 'Logged Out Successfully');
     }
-    public function homepage()
+    public function dashboard()
     {
         $user = User::find(session('loginID'));
 
         if ($user) {
-            return view('homepage', ['user' => $user]);
+            if (session('role') == 'teacher') {
+                return view('dashboard', ['user' => $user]);
+            } elseif (session('role') == 'student') {
+                
+                return view('studentdashboard', ['user' => $user]);
+            } else {
+                return redirect('/logout')->with('error', 'Invalid role');
+            }
         } else {
-            // User not found
-            return 'User not found';
+            return redirect('/logout')->with('error', 'User not found');
         }
     }
 }
