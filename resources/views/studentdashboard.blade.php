@@ -1,110 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuizMaster Student Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #6C63FF;
-            --secondary-color: #4CAF50;
-            --accent-color: #FF6B6B;
-            --background-color: #F0F3F8;
-            --text-color: #333333;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-
-        .sidebar {
-            height: 100vh;
-            background-color: var(--primary-color);
-            padding-top: 20px;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 250px;
-            transition: all 0.3s;
-        }
-
-        .sidebar .nav-link {
-            color: #ffffff;
-            font-weight: 500;
-            border-radius: 5px;
-            margin: 5px 15px;
-            transition: all 0.3s;
-        }
-
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-            transition: all 0.3s;
-        }
-
-        .widget {
-            background-color: #ffffff;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-        }
-
-        .widget:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .widget h3 {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--secondary-color);
-        }
-
-        .list-group-item {
-            border: none;
-            padding: 10px 0;
-            font-weight: 500;
-        }
-
-        .progress {
-            height: 10px;
-            margin-top: 5px;
-        }
-
-        .quiz-icon {
-            font-size: 2rem;
-            margin-right: 15px;
-            color: var(--accent-color);
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-        }
-    </style>
-</head>
+<x-head :title="'QuizTech | Dashboard'"/>
+<link rel="stylesheet" href="{{ asset('webassets/css/studentdashboard.css') }}">
 <body>
     <div class="container-fluid">
         <div class="row">
@@ -194,11 +91,11 @@
                             <ul class="list-group">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Math Quiz - Algebra
-                                    <span class="badge bg-primary rounded-pill">Tomorrow</span>
+                                    <span class="badge newbadge rounded-pill">Tomorrow</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Science Quiz - Biology
-                                    <span class="badge bg-secondary rounded-pill">In 3 days</span>
+                                    <span class="badge newbadge2 rounded-pill">In 3 days</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     History Quiz - Ancient Rome
@@ -221,7 +118,7 @@
                                         <span>92%</span>
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 92%" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: 92%" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
@@ -230,7 +127,7 @@
                                         <span>88%</span>
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 88%" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: 88%" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
@@ -239,7 +136,7 @@
                                         <span>75%</span>
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
@@ -248,7 +145,7 @@
                                         <span>95%</span>
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </li>
                             </ul>

@@ -1,47 +1,90 @@
-daynight = document.querySelector('#switch');
-logo = document.querySelector('#logo');
+const toggleSwitch = document.querySelector('#checkbox');
+            const navbarlogo = document.querySelector('.navbar-logo');
+            const currentTheme = localStorage.getItem('theme');
 
-// Function to apply dark mode styles
-function applyDarkMode() {
-    document.documentElement.style.setProperty('--primary', '#111827');
-    document.documentElement.style.setProperty('--navbg', 'rgba(31, 41, 55,0.75)');
-    document.documentElement.style.setProperty('--fontcolor', '#a6a4a4');
-    document.documentElement.style.setProperty('--secondary', '#f77f00');
-    document.documentElement.style.setProperty('--action', '#b12166');
-    document.documentElement.style.setProperty('--tertiary', '#391560');
-    document.documentElement.style.setProperty('--tcolor', 'rgba(156, 163, 175, 1)');
-    document.documentElement.style.setProperty('--headingcolor', 'rgba(243, 244, 246, 1)');
-    logo.classList.add('inverted-color');
-}
+            if (currentTheme) {
+                document.documentElement.setAttribute('data-theme', currentTheme);
+                if (currentTheme === 'dark') {
+                    toggleSwitch.checked = true;
+                    navbarlogo.classList.add('inverted-color');
+                }
+            }
 
-// Function to apply light mode styles
-function applyLightMode() {
-    document.documentElement.style.setProperty('--primary', 'white');
-    document.documentElement.style.setProperty('--fontcolor', 'black');
-    document.documentElement.style.setProperty('--secondary', '#391560');
-    document.documentElement.style.setProperty('--action', '#f77f00');
-    document.documentElement.style.setProperty('--tertiary', '#b12166');
-    document.documentElement.style.setProperty('--navbg', 'rgba(255,255,255,0.75)');
-    document.documentElement.style.setProperty('--tcolor', 'rgba(17, 24, 39, 1)');
-    document.documentElement.style.setProperty('--headingcolor', 'rgb(7, 10, 17)');
-    logo.classList.remove('inverted-color');
-}
+            function switchTheme(e) {
+                if (e.target.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    navbarlogo.classList.add('inverted-color');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    navbarlogo.classList.remove('inverted-color');
+                }
+            }
 
-// Check localStorage for dark mode setting on page load
-if (localStorage.getItem('darkmode') === 'on') {
-    daynight.checked = true;
-    applyDarkMode();
-} else {
-    daynight.checked = false;
-    applyLightMode();
-}
+            toggleSwitch.addEventListener('change', switchTheme, false);
 
-daynight.addEventListener('change', () => {
-    if (daynight.checked) {
-        applyDarkMode();
-        localStorage.setItem('darkmode', 'on');
-    } else {
-        applyLightMode();
-        localStorage.setItem('darkmode', 'off');
-    }
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// daynight = document.querySelector('#checkbox');
+// logo = document.querySelector('#logo');
+
+// // Function to apply dark mode styles
+// function applyDarkMode() {
+//     document.documentElement.style.setProperty('--primary', '#111827');
+//     document.documentElement.style.setProperty('--navbg', 'rgba(31, 41, 55,0.75)');
+//     document.documentElement.style.setProperty('--fontcolor', '#a6a4a4');
+//     document.documentElement.style.setProperty('--secondary', '#f77f00');
+//     document.documentElement.style.setProperty('--action', '#b12166');
+//     document.documentElement.style.setProperty('--tertiary', '#391560');
+//     document.documentElement.style.setProperty('--tcolor', 'rgba(156, 163, 175, 1)');
+//     document.documentElement.style.setProperty('--headingcolor', 'rgba(243, 244, 246, 1)');
+//     logo.classList.add('inverted-color');
+// }
+
+// // Function to apply light mode styles
+// function applyLightMode() {
+//     document.documentElement.style.setProperty('--primary', 'white');
+//     document.documentElement.style.setProperty('--fontcolor', 'black');
+//     document.documentElement.style.setProperty('--secondary', '#391560');
+//     document.documentElement.style.setProperty('--action', '#f77f00');
+//     document.documentElement.style.setProperty('--tertiary', '#b12166');
+//     document.documentElement.style.setProperty('--navbg', 'rgba(255,255,255,0.75)');
+//     document.documentElement.style.setProperty('--tcolor', 'rgba(17, 24, 39, 1)');
+//     document.documentElement.style.setProperty('--headingcolor', 'rgb(7, 10, 17)');
+//     logo.classList.remove('inverted-color');
+// }
+
+// // Check localStorage for dark mode setting on page load
+// if (localStorage.getItem('darkmode') === 'on') {
+//     daynight.checked = true;
+//     applyDarkMode();
+// } else {
+//     daynight.checked = false;
+//     applyLightMode();
+// }
+
+// daynight.addEventListener('change', () => {
+//     if (daynight.checked) {
+//         applyDarkMode();
+//         localStorage.setItem('darkmode', 'on');
+//     } else {
+//         applyLightMode();
+//         localStorage.setItem('darkmode', 'off');
+//     }
+// });

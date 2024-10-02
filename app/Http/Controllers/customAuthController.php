@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Quiz;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -65,7 +66,6 @@ class customAuthController extends Controller
                 $intendedUrl = session('intended_url', '/dashboard');
                 session()->forget('intended_url'); // Clear the intended URL from the session
                 return redirect($intendedUrl);
-               
             } else {
                 return back()->with('fail', 'Password Incorrect. Try again !!');
             }
@@ -82,13 +82,21 @@ class customAuthController extends Controller
     public function dashboard()
     {
         $user = User::find(session('loginID'));
+        // Get the number of quizzes
+        $quizCount = Quiz::count();
+        $studentCount = User::where('role', 'student')->count();
+        $recentQuizzes = Quiz::latest()->take(4)->get();
 
         if ($user) {
             if (session('role') == 'teacher') {
-                return view('dashboard', ['user' => $user]);
+                return view('dashboard', [
+                    'user' => $user,
+                    'quizCount' => $quizCount,
+                    'studentCount' => $studentCount,
+                    'recentQuizzes' => $recentQuizzes,
+                ]);
             } elseif (session('role') == 'student') {
-                
-                return view('studentdashboard', ['user' => $user]);
+                return view('studentdashboard', ['user' => $user, 'quizCount' => $quizCount]);
             } else {
                 return redirect('/logout')->with('error', 'Invalid role');
             }

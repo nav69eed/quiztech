@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <x-head :title="'QuizTech | Dashboard'" />
-
+<link rel="stylesheet" href="{{ asset('webassets/css/dashboard.css') }}">
+<x-nav-bar-main :user="$user" />
 <body>
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
             <nav class="col-md-3 col-lg-2 d-md-block sidebar">
                 <div class="position-sticky">
-                    <h2 class="text-center text-white mb-4">QuizMaster</h2>
+                    <h2 class="text-center text-white mb-4">QuizTech</h2>
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
@@ -43,31 +44,33 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
-                    <a class="btn btn-primary" href="/allquizzes">
+                    <h1 class="h2">{{ $user->name }}</h1>
+                    <a class="btn btn-primary" href="/quizform">
                         <i class="fas fa-plus me-2"></i> Create New Quiz
                     </a>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="widget">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-book quiz-icon"></i>
-                                <div>
-                                    <h3>Total Quizzes</h3>
-                                    <p class="stat-number">25</p>
+                        <a href="/allquizzes">
+                            <div class="widget">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-book quiz-icon"></i>
+                                    <div>
+                                        <h3>Total Quizzes</h3>
+                                        <p class="stat-number">{{ $quizCount }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-4">
                         <div class="widget">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-users quiz-icon"></i>
                                 <div>
-                                    <h3>Active Users</h3>
-                                    <p class="stat-number">150</p>
+                                    <h3>Registered Students</h3>
+                                    <p class="stat-number">{{ $studentCount }}</p>
                                 </div>
                             </div>
                         </div>
@@ -90,20 +93,17 @@
                         <div class="widget">
                             <h3>Recent Quizzes</h3>
                             <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Math Quiz - Grade 5
-                                    <span class="badge rounded-pill newbadge">New</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Science Trivia
-                                    <span class="badge newbadge2 rounded-pill">Popular</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    History of Ancient Rome
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Programming Basics
-                                </li>
+                                @foreach ($recentQuizzes as $index => $quiz)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ $quiz->title }}
+                                        @if ($index === 0)
+                                            <span class="badge rounded-pill newbadge">New</span>
+                                        @endif
+                                        @if ($index === 1)
+                                            <span class="badge rounded-pill newbadge2">IMP</span>
+                                        @endif
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>

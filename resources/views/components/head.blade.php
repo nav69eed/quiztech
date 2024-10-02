@@ -14,7 +14,7 @@
     <!-- CUSTOM CSS -->
     <link rel="stylesheet" href="{{asset('webassets/css/index.css')}}">
     <link rel="stylesheet" href="{{asset('webassets/css/utilities.css')}}">
-    <link rel="stylesheet" href="{{ asset('webassets/css/dashboard.css') }}">
+    
   
     <!-- Bootstarp 5 js -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer ></script>

@@ -103,12 +103,7 @@ class quizController extends Controller
     {
         $user = User::find(session('loginID'));
         $quizzes = Quiz::with('questions.options')->get();
-        if ($user) {
-            // return $quizzes;
-            return view('allquiz', ['user' => $user, 'quizzes' => $quizzes]);
-        } else {
-            return 'User not found';
-        }
+        return view('allquizzes', ['user' => $user, 'quizzes' => $quizzes]);
     }
     // Displays a specific quiz
     public function squiz($qid)
@@ -116,7 +111,7 @@ class quizController extends Controller
         $user = User::find(session('loginID'));
         $quiz = Quiz::with('questions.options')->where('id', $qid)->first();
         if ($user) {
-            return view('aquiz', ['user' => $user, 'quiz' => $quiz]);
+            return view('singlequiz', ['user' => $user, 'quiz' => $quiz]);
         } else {
             return 'User not found';
         }
@@ -132,9 +127,9 @@ class quizController extends Controller
             ->where('user_id', $userId)
             ->first();
 
-        if ($attemptedUser) {
-            return back()->with('error', 'You have already attempted this quiz.');
-        }
+        // if ($attemptedUser) {
+        //     return back()->with('error', 'You have already attempted this quiz.');
+        // }
 
         $quiz = Quiz::with('questions.options')->where('id', $id)->first();
         $response = [];
@@ -154,7 +149,6 @@ class quizController extends Controller
                 $response[] = "Wrong Answer !!!";
             }
         }
-
         $response['score'] = $score;
 
         $userId = session('loginID');
@@ -171,6 +165,22 @@ class quizController extends Controller
                 'attempts' => DB::raw('COALESCE(attempts, 0) + 1')
             ]
         );
-        return back()->with(['response' => $response, 'inpt' => $res]);
+        return redirect()->route('quizresult', ['id' => $id])->with(['response' => $response, 'inpt' => $res]);
+    }
+
+    public function aquiz($id)
+    {
+        $user = User::find(session('loginID'));
+        $quiz = Quiz::with('questions.options')->where('id', $id)->first();
+        
+        // Retrieve the response and input data from the session
+        $response = session('response');
+        $inpt = session('inpt');
+        return view('aquiz', [
+            'user' => $user, 
+            'quiz' => $quiz,
+            'response' => $response,
+            'inpt' => $inpt
+        ]);
     }
 }

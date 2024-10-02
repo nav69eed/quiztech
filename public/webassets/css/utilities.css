@@ -5,6 +5,9 @@ body{
 *{
   transition: background-color .5s;
 }
+a{
+  text-decoration: none;
+}
 .c-p {
   color: var(--primary);
 }
@@ -34,6 +37,9 @@ body{
   background-color: var(--primary) !important;
   color: var(--action);
   border-color: var(--action);
+}
+.linkactive{
+  color: var(--action) !important;
 }
 
 

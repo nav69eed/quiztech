@@ -1,185 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-<x-head :title="'QuizTech'" />
+<x-head :title="'QuizTech - Results'" />
 <style>
-    .login-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: static;
-        transform: translate(0%, 0%);
+    :root {
+        --primary-color: #391560;
+        --primary: #F0F3F8;
+        --secondary: #391560;
+        --tertiary: #b12166;
+        --action: #f77f00;
+        --navbg: rgba(255, 255, 255, 1);
+        --fontcolor: black;
+        --tcolor: rgba(17, 24, 39, 1);
+        --headingcolor: rgb(7, 10, 17);
     }
 
-    .quizBox {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    body {
+        background-color: var(--primary);
+        color: var(--fontcolor);
+        font-family: 'Arial', sans-serif;
     }
 
-    .radio-options {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+    .quiz-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .radio-options label {
-        display: block;
-        padding: 8px;
-        border: 1px solid #ccc;
+    .quiz-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .quiz-header h1 {
+        margin: 0;
+        font-size: 2rem;
+    }
+
+    .score-summary {
+        display: flex;
+        justify-content: space-around;
+        background-color: var(--action);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+
+    .score-item {
+        text-align: center;
+    }
+
+    .score-item h2 {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    .score-item p {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0.5rem 0 0;
+    }
+
+    .question-container {
+        background-color: var(--primary);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .question-result {
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
         border-radius: 5px;
-        cursor: pointer;
+        margin-bottom: 1rem;
     }
 
-    .radio-options input[type="radio"] {
-        display: none;
+    .correct {
+        background-color: #4CAF50;
+        color: white;
     }
 
-    .radio-options input[type="radio"]:checked+label {
-        background-color: #007BFF;
-        color: #fff;
-        border-color: #007BFF;
+    .incorrect {
+        background-color: var(--tertiary);
+        color: white;
+    }
+
+    .question-text {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: var(--headingcolor);
+    }
+
+    .options-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .option {
+        padding: 0.8rem;
+        border: 2px solid var(--secondary);
+        border-radius: 5px;
+        cursor: not-allowed;
+        transition: all 0.3s ease;
+    }
+
+    .option.selected {
+        background-color: var(--secondary);
+        color: white;
+    }
+
+    .option.correct {
+        background-color: #4CAF50;
+        border-color: #4CAF50;
+        color: white;
+    }
+
+    .option.incorrect {
+        background-color: var(--tertiary);
+        border-color: var(--tertiary);
+        color: white;
     }
 </style>
 
 <body>
     <x-nav-bar-main :user="$user" />
     
-    @if (Session::has('error'))
-        <div class="alert alert-danger mt-4">
-            {{ Session::get('error') }}
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Quiz Results</h1>
         </div>
-    @endif
 
-    @if (!Session::has('response'))
-        <div class="mx-auto my-3 p-4 shadow  h6 quizdiv position-relative" id="quiztitle">
-            <p class="c-a">
-                Quiz Name : <strong class="c-s">{{ $quiz->title }}</strong>
-            </p>
-            <p class="">
-                <span class="c-a h6">Description :- </span>{{ $quiz->description }}
-            </p>
-            <a id="quizstartbtn">
-                <x-start-button />
-            </a>
+        @php
+            $response = Session::get('response');
+            $totalQuestions = count($quiz->questions);
+            $correctAnswers = collect($response)->filter(function($answer) { return Str::startsWith($answer, 'Correct'); })->count();
+        @endphp
+
+        <div class="score-summary">
+            <div class="score-item">
+                <h2>Total Questions</h2>
+                <p>{{ $totalQuestions }}</p>
+            </div>
+            <div class="score-item">
+                <h2>Correct Answers</h2>
+                <p>{{ $correctAnswers }}</p>
+            </div>
+            <div class="score-item">
+                <h2>Score</h2>
+                <p>{{ round(($correctAnswers / $totalQuestions) * 100) }}%</p>
+            </div>
         </div>
-    @endif
-    <div class="quizBox">
-        <div class="" id="quiz">
-            <form action="{{ route('quizsubmit', ['id' => $quiz->id]) }}" method="POST">
-                @csrf
-                @php
-                    $response = Session::get('response');
-                @endphp
-                @if (Session::has('response'))
-                    <div class="alert alert-info py-2 mt-4">
-                        <p class="mb-0">
-                            <strong>Total Marks:</strong> {{ count($quiz->questions) }}
-                        </p>
-                        <p class="mb-0">
-                            <strong>Obtained Marks:</strong> {{ collect($response)->filter(function($answer) { return Str::startsWith($answer, 'Correct'); })->count() }}
-                        </p>
-                    </div>
+
+        @foreach ($quiz->questions as $index => $question)
+            <div class="question-container">
+                @if (isset($response[$index]) && \Illuminate\Support\Str::startsWith($response[$index], 'Correct'))
+                    <div class="question-result correct">Correct Answer!</div>
+                @else
+                    <div class="question-result incorrect">Incorrect Answer</div>
                 @endif
-                @forelse ($quiz->questions as $index => $question)
-                    @if (Session::has('response'))
-                        @if (isset($response[$index]) && \Illuminate\Support\Str::startsWith($response[$index], 'Correct'))
-                            <div class="alert alert-success py-1 mt-4">
-                                Correct Answer !!!
-                            </div>
-                        @else
-                            <div class="alert alert-danger py-1 mt-4">
-                                Wrong Answer !!!
-                            </div>
-                        @endif
-                    @endif
 
-                    <div class="form-check mt-4">
-                        {{ $question->ques }}
-                    </div>
+                <div class="question-text">
+                    <strong>Question {{ $index + 1 }}:</strong> {{ $question->ques }}
+                </div>
+
+                <div class="options-container">
                     @foreach ($question->options as $optionIndex => $option)
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input"
-                                id="radio{{ $question->id }}_{{ $optionIndex }}" name="{{ $question->id }}"
-                                value="{{ $option->opt }}">
-
-                            <label class="form-check-label"
-                                for="radio{{ $question->id }}_{{ $optionIndex }}">{{ $option->opt }}</label>
+                        <div class="option {{ $option->opt === Session::get('inpt')[$question->id] ? 'selected' : '' }} 
+                                    {{ $option->is_correct ? 'correct' : ($option->opt === Session::get('inpt')[$question->id] && !$option->is_correct ? 'incorrect' : '') }}">
+                            {{ $option->opt }}
                         </div>
                     @endforeach
-
-                @empty
-                    <p>No questions available.</p>
-                @endforelse
-
-                <button type="submit" class="btn btn-primary mt-3">Submit</button>
-            </form>
-        </div>
+                </div>
+            </div>
+        @endforeach
     </div>
-    @if (!Session::has('response'))
-        <div id="timer" class="text-center mt-3 h4"></div>
-    @endif
 </body>
-<script>
-    btn = document.getElementById('quizstartbtn');
-    quiztitle = document.getElementById('quiztitle');
-    quiz = document.getElementById('quiz');
-    // Corrected code
-    var radio = document.querySelectorAll('input[type="radio"]');
-    @php
-        $sessionData = Session::get('inpt');
-    @endphp
-    var sessionData = {!! json_encode($sessionData) !!};
-    quiz.style.display = 'none';
-    @if (Session::has('response'))
-        // console.log(radio);
-        quiz.style.display = 'flex';
-        radio.forEach(radioButton => {
-            if (radioButton.value === sessionData[radioButton.name]) {
-                radioButton.checked = true;
-            }
-            radioButton.disabled = true;
-        });
-    @endif
-    btn.addEventListener('click', () => {
-        quiz.style.display = 'flex';
-        quiztitle.style.display = 'none';
-    });
-
-    // Add timer functionality
-    var timeLimit = {{ $quiz->time_limit * 60 }}; // Convert minutes to seconds
-    var timer = document.getElementById('timer');
-    var quizForm = document.querySelector('form');
-
-    function startTimer() {
-        var interval = setInterval(function() {
-            var minutes = Math.floor(timeLimit / 60);
-            var seconds = timeLimit % 60;
-            timer.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-            
-            if (timeLimit <= 0) {
-                clearInterval(interval);
-                quizForm.submit();
-            }
-            timeLimit--;
-        }, 1000);
-    }
-
-    btn.addEventListener('click', () => {
-        quiz.style.display = 'flex';
-        quiztitle.style.display = 'none';
-        startTimer();
-    });
-
-    // Auto-submit when time runs out
-    setTimeout(() => {
-        if (!quizForm.classList.contains('submitted')) {
-            quizForm.submit();
-        }
-    }, {{ $quiz->time_limit * 60 * 1000 }});
-
-    quizForm.addEventListener('submit', function() {
-        this.classList.add('submitted');
-    });
-</script>
-
 </html>
