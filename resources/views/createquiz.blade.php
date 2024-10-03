@@ -1,117 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-<x-head :title="'Create Quiz'" />
+<x-head :title="'QuizTech | Create Quiz'" />
 <style>
-    .hero1 {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    :root {
+        --primary-color: #391560;
+        --primary: #F0F3F8;
+        --secondary: #391560;
+        --tertiary: #b12166;
+        --action: #f77f00;
+        --navbg: rgba(255, 255, 255, 1);
+        --fontcolor: black;
+        --tcolor: rgba(17, 24, 39, 1);
+        --headingcolor: rgb(7, 10, 17);
     }
 
-    .login-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: static;
-        transform: translate(0%, 0%);
+    body {
+        background-color: var(--primary);
+        color: var(--fontcolor);
+        font-family: 'Arial', sans-serif;
+    }
+
+    .navbar {
+        background-color: var(--navbg);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    h1,
+    h2,
+    h3 {
+        color: var(--headingcolor);
+    }
+
+    .card {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .btn-primary {
+        background-color: var(--action);
+        border-color: var(--action);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--tertiary);
+        border-color: var(--tertiary);
+    }
+
+    .form-control:focus {
+        border-color: var(--tertiary);
+        box-shadow: 0 0 0 0.2rem rgba(177, 33, 102, 0.25);
+    }
+
+    .option-input {
+        border-left: 3px solid var(--secondary);
+    }
+
+    .correct-answer {
+        background-color: rgba(57, 21, 96, 0.1);
+        border-radius: 5px;
+    }
+
+    #quizInfo {
+        background-color: var(--secondary);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
     }
 </style>
 
 <body>
     <x-nav-bar-main :user="$user" />
-    <div class="h2 c-a w-50 mx-auto mt-5">
-        Quiz Name : <span class="c-s">{{ $quiz->title }}
-        </span>
-    </div>
-    <p class="w-50 mx-auto">
-        <span class="h4 c-a">Description:</span> {{ $quiz->description }}
-    </p>
-    <div class="hero1" style="min-height: 80vh;">
-        @php $counter = 0 @endphp
-        @forelse ($quiz->questions as $question)
-            <div class="questions shadow-lg p-3 mt-3 ps-5">
-                <p class="h5 c-a">
-                    Q{{ ++$counter }} : {{ $question->ques }}
-                </p>
-                <p class="h6 ps-4 ans">
-                    {{ $question->options[0]->ans }}
-                </p>
-            </div>
-        @empty
-            <div class="h5 c-a shadow-lg">
-                No Question Yet
-            </div>
-        @endforelse
 
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Create Your Quiz</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title mb-4">Quiz Information</h2>
+                        <form id="quizInfoForm" action="{{ route('createquiz') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="quizName" class="form-label">Quiz Name</label>
+                                <input type="text" class="form-control" name="quizName" id="quizName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quizSubject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" name="quizSubject" id="quizSubject" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quizDescription" class="form-label">Description</label>
+                                <textarea class="form-control" name="quizDescription" id="quizDescription" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quizTimeLimit" class="form-label">Time Limit (minutes)</label>
+                                <input type="number" class="form-control" name="quizTimeLimit" id="quizTimeLimit"
+                                    min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Quiz Info</button>
+                        </form>
+                    </div>
+                </div>
 
-        <div class="form shadow-lg" style="position: relative;">
-            <div class="login-box">
-
-                <form action=" {{ route('createques') }} " method="POST">
-                    @csrf
-                    <div class="c-a h5">
-                        Enter Question
-                    </div>
-                    <div class="user-box">
-                        <input type="text" name="ques" required="">
-                        <label class="c-s">Question</label>
-                    </div>
-                    <div class="user-box">
-                        {{-- <textarea name="ans" id="" cols="20" rows="1">
-                    </textarea> --}}
-                        <input type="text" name="opt1" required="">
-                        <label class="c-s">Option 1</label>
-                        <div class="">
-                            <input type="radio" name="correct_option" value="1"> Correct
-                        </div>
-
-                    </div>
-                    <div class="user-box">
-                        <input type="text" name="opt2" required="">
-                        <label class="c-s">Option 2</label>
-                        <div class="">
-                            <input type="radio" name="correct_option" value="2"> Correct
-                        </div>
-                    </div>
-                    <div class="user-box">
-                        <input type="text" name="opt3" required="">
-                        <label class="c-s">Option 3</label>
-                        <div class="">
-                            <input type="radio" name="correct_option" value="3"> Correct
-                        </div>
-
-                    </div>
-                    <div class="user-box">
-                        <input type="text" name="opt4" required="">
-                        <label class="c-s">Option 4</label>
-                        <div class="">
-                            <input type="radio" name="correct_option" value="4"> Correct
-                        </div>
-                    </div>
-                    <center>
-                        <a class="c-s">
-                            <button class="btn" type="submit">Create</button>
-                            <span></span>
-                        </a>
-                    </center>
-                </form>
             </div>
         </div>
-
     </div>
 </body>
-<style>
-    .hero {
-        /* position: relative; */
-        max-height: 400px;
-    }
-
-    .questions {}
-
-    .form {
-        position: relative;
-    }
-</style>
 
 </html>

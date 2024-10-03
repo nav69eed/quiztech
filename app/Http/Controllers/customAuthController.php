@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class customAuthController extends Controller
 {
@@ -86,14 +87,21 @@ class customAuthController extends Controller
         $quizCount = Quiz::count();
         $studentCount = User::where('role', 'student')->count();
         $recentQuizzes = Quiz::latest()->take(4)->get();
-
-        if ($user) {
+        $topUsers = DB::table('attemptedusers')
+            ->join('users', 'attemptedusers.user_id', '=', 'users.id') // Join with users table
+            ->select('attemptedusers.user_id', 'users.name as user_name', DB::raw('AVG(attemptedusers.percentage_scored) as avg_score')) // Select user name from users table
+            ->groupBy('attemptedusers.user_id', 'users.name') // Group by user_id and user name
+            ->orderBy('avg_score', 'desc')
+            ->take(4)
+            ->get();
+             if ($user) {
             if (session('role') == 'teacher') {
                 return view('dashboard', [
                     'user' => $user,
                     'quizCount' => $quizCount,
                     'studentCount' => $studentCount,
                     'recentQuizzes' => $recentQuizzes,
+                    'topusers' => $topUsers
                 ]);
             } elseif (session('role') == 'student') {
                 return view('studentdashboard', ['user' => $user, 'quizCount' => $quizCount]);

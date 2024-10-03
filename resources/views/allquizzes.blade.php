@@ -105,11 +105,11 @@
                     <div class="card h-100 quiz-card">
                         <div class="card-body">
                             <h5 class="card-title">{{ $quiz->title }}</h5>
-                            <h6 class="card-subtitle">Subject of Quiz</h6>
+                            <h6 class="card-subtitle">{{ $quiz->subject }}</h6>
                             <p class="card-text">{{ $quiz->description }}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="badge">fddfdf</span>
-                                <span class="quiz-info"><i class="fas fa-question-circle"></i> 12 questions</span>
+                                <span class="quiz-info"><i class="fas fa-question-circle"></i> {{ count($quiz->questions) }} questions</span>
                             </div>
                         </div>
                         <div class="card-footer">

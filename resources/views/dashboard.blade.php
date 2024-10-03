@@ -3,6 +3,7 @@
 <x-head :title="'QuizTech | Dashboard'" />
 <link rel="stylesheet" href="{{ asset('webassets/css/dashboard.css') }}">
 <x-nav-bar-main :user="$user" />
+
 <body>
     <div class="container-fluid">
         <div class="row">
@@ -45,7 +46,7 @@
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">{{ $user->name }}</h1>
-                    <a class="btn btn-primary" href="/quizform">
+                    <a class="btn btn-primary" href="/createquiz">
                         <i class="fas fa-plus me-2"></i> Create New Quiz
                     </a>
                 </div>
@@ -111,46 +112,19 @@
                         <div class="widget">
                             <h3>Top Performers</h3>
                             <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>John Doe</span>
-                                        <span>98%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 98%"
-                                            aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Jane Smith</span>
-                                        <span>95%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 95%"
-                                            aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Bob Johnson</span>
-                                        <span>92%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 92%"
-                                            aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Alice Brown</span>
-                                        <span>90%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 90%"
-                                            aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </li>
+                                @forelse ($topusers as$topuser)
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>{{ $topuser->user_name }}</span>
+                                            <span>{{ $topuser->avg_score }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: {{ $topuser->avg_score }}%"
+                                                aria-valuenow="{{ $topuser->avg_score }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </li>
+                                @empty
+                                @endforelse
                             </ul>
                         </div>
                     </div>

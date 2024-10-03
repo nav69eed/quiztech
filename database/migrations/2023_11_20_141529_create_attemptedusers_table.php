@@ -20,6 +20,7 @@ class CreateAttemptedusersTable extends Migration
             $table->integer('attempts')->default(0);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('bestScore')->default(0);
+            $table->float('percentage_scored');
             $table->timestamps();
         });
     }

@@ -51,68 +51,25 @@ Route::middleware(['authenticationcheck'])->group(function () {
     // Route to handle user logout
     Route::get('/logout', [customAuthController::class, 'logoutuser'])->name('logout');
 
-    // Route to display quiz form with 'isteachercheck' middleware
-    Route::get('/quizform', function () {
-        $user = finduser();
-        // If user is found, display the quiz form view
-        return view('quizform', ['user' => $user]);
-    })->middleware('isteachercheck');
-
     // Route to display quiz creation page with 'isteachercheck' middleware
-    Route::get('/createquiz', function () {
-        $qid = Session('quizID');
-        $quiz = Quiz::with('questions.options')->find($qid);
-        $user = finduser();
-        // If user is found, display the quiz creation view with user and quiz data
-        return view('createquiz', ['user' => $user, 'quiz' => $quiz]);
-    })->middleware('isteachercheck');
+    Route::get('/createquiz', [quizController::class,'createquiz2'])->middleware('isteachercheck')->name('CreateQuiz');
+    Route::post('/createquiz', [quizController::class, 'createquiz'])->name('createquiz')->middleware('isteachercheck');
+
+    // Route to display question creation page
+    Route::get('/createquestion', [quizController::class, 'displayquestionform'])->middleware('isteachercheck')->name('createquestion');
+    Route::post('/createquestion', [quizController::class, 'createquestion'])->name('createquestion')->middleware('isteachercheck');
 
     // Route to display all quizzes
     Route::get('/allquizzes', [quizController::class, 'allquiz'])->name('allquiz');
 
     // Route to display a single quiz
     Route::get('/singlequiz/{id}', [quizController::class, 'squiz'])->name('squiz');
-    Route::get('/quizresult/{id}', [quizController::class, 'aquiz'])->name('quizresult');
+    Route::get('/quizresult/{id}', [quizController::class, 'quizresult'])->name('quizresult');
 });
 
 // Quiz creation routes
 // Route to handle quiz form submission
-Route::post('/quizform', [quizController::class, 'quizform'])->name('quizform');
 
-// Route to handle quiz creation
-Route::post('/createquiz', [quizController::class, 'createques'])->name('createques');
 
 // Route to submit a quiz
 Route::post('/quiz/submit/{id}', [quizController::class, 'quizsubmit'])->name('quizsubmit')->middleware('isstudentcheck');
-
-
-// Debug route to display quiz data
-// Route to display all quizzes with their questions, options, and attempted users
-//Route::get('/quiz', function () {
-//  $id = 1;
-//$quiz = Quiz::with('questions.options', 'attemptedusers')->get();
-// return $quiz;
-//});
-
-
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-//Route::view('/dashboard', 'dashboard');
