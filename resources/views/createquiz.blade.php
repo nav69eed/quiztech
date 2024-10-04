@@ -109,6 +109,10 @@
                                 <input type="number" class="form-control" name="quizTimeLimit" id="quizTimeLimit"
                                     min="1" required>
                             </div>
+                            <div class="mb-3">
+                                <label for="due_datetime" class="form-label">Due Date and Time</label>
+                                <input type="datetime-local" class="form-control" name="due_datetime" id="due_datetime" required>
+                            </div>
                             <button type="submit" class="btn btn-primary">Save Quiz Info</button>
                         </form>
                     </div>

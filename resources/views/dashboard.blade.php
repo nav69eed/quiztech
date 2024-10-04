@@ -28,7 +28,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('studentslist') }}">
                                 <i class="fas fa-users me-2"></i> Users
                             </a>
                         </li>
@@ -66,26 +66,30 @@
                         </a>
                     </div>
                     <div class="col-md-4">
-                        <div class="widget">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-users quiz-icon"></i>
-                                <div>
-                                    <h3>Registered Students</h3>
-                                    <p class="stat-number">{{ $studentCount }}</p>
+                        <a href="{{ route('studentslist') }}">
+                            <div class="widget">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-users quiz-icon"></i>
+                                    <div>
+                                        <h3>Registered Students</h3>
+                                        <p class="stat-number">{{ $studentCount }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-4">
-                        <div class="widget">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-check-circle quiz-icon"></i>
-                                <div>
-                                    <h3>Completed Quizzes</h3>
-                                    <p class="stat-number">1,234</p>
+                        <a href="{{ route('overduequizzes') }}">
+                            <div class="widget">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-check-circle quiz-icon"></i>
+                                    <div>
+                                        <h3>Completed Quizzes</h3>
+                                        <p class="stat-number">{{ $overdueQuizCount }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
@@ -119,8 +123,10 @@
                                             <span>{{ $topuser->avg_score }}%</span>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: {{ $topuser->avg_score }}%"
-                                                aria-valuenow="{{ $topuser->avg_score }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar" role="progressbar"
+                                                style="width: {{ $topuser->avg_score }}%"
+                                                aria-valuenow="{{ $topuser->avg_score }}" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
                                         </div>
                                     </li>
                                 @empty
