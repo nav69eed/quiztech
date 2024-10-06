@@ -14,6 +14,7 @@ class CreateQuizzesTable extends Migration
             $table->string('description');
             $table->string('subject');
             $table->integer('time_limit'); // Add this line
+            $table->dateTime('due_datetime')->nullable(); // Add due_datetime field
             // Add other quiz fields as needed
             $table->timestamps();
         });

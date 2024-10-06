@@ -21,6 +21,6 @@ class IsStudentCheck
         }
 
         // Return a proper response object instead of a string
-        return response("You are Not Student", 403); // 403 Forbidden status code
+        return response()->view('errors.403', [], 403); // 403 Forbidden status code
     }
 }

@@ -22,7 +22,7 @@ class LoginCheck
             return $next($request);
         } else {
             // If the user is logged in, redirect them to the '/home' route.
-            return redirect('/home');
+            return redirect('dashboard');
         }
     }
 }

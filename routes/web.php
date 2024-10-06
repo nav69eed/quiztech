@@ -30,19 +30,19 @@ Route::group(['middleware' => 'loginusercheck'], function () {
     Route::view('/login', 'login');
     // Route to display the registration page
     Route::view('/registration', 'registration');
+    // Authentication routes
+    // Route to handle login form submission
+    Route::post('/login', [customAuthController::class, 'loginuser'])->name('login');
+    // Route to handle registration form submission
+    Route::post('/registration', [customAuthController::class, 'registeruser'])->name('registration');
 });
 
-// Authentication routes
-// Route to handle login form submission
-Route::post('/login', [customAuthController::class, 'loginuser'])->name('login');
-// Route to handle registration form submission
-Route::post('/registration', [customAuthController::class, 'registeruser'])->name('registration');
 
 
 
 // Home page route
 // Route to display the home page
-Route::view('/', 'index');
+Route::view('/', 'homepage');
 
 // Routes that require authentication
 Route::middleware(['authenticationcheck'])->group(function () {
@@ -52,7 +52,7 @@ Route::middleware(['authenticationcheck'])->group(function () {
     Route::get('/logout', [customAuthController::class, 'logoutuser'])->name('logout');
 
     // Route to display quiz creation page with 'isteachercheck' middleware
-    Route::get('/createquiz', [quizController::class,'createquiz2'])->middleware('isteachercheck')->name('CreateQuiz');
+    Route::get('/createquiz', [quizController::class, 'createquiz2'])->middleware('isteachercheck')->name('CreateQuiz');
     Route::post('/createquiz', [quizController::class, 'createquiz'])->name('createquiz')->middleware('isteachercheck');
 
     // Route to display question creation page
@@ -65,11 +65,15 @@ Route::middleware(['authenticationcheck'])->group(function () {
     // Route to display a single quiz
     Route::get('/singlequiz/{id}', [quizController::class, 'squiz'])->name('squiz');
     Route::get('/quizresult/{id}', [quizController::class, 'quizresult'])->name('quizresult');
+
+    //list all students
+    Route::get('/studentslist', [quizController::class, 'studentslist'])->name('studentslist')->middleware('isteachercheck');
+
+    //Delete specific Student
+    Route::get('/deletestudent/{id}', [customAuthController::class, 'deletestudent'])->name('deletestudent')->middleware('isteachercheck');
+
+    //display over due quizzes
+    Route::get('/overduequizzes', [quizController::class, 'displayoverduequizzes'])->name('overduequizzes')->middleware('isteachercheck');
+    // Route to submit a quiz
+    Route::post('/quiz/submit/{id}', [quizController::class, 'quizsubmit'])->name('quizsubmit')->middleware('isstudentcheck');
 });
-
-// Quiz creation routes
-// Route to handle quiz form submission
-
-
-// Route to submit a quiz
-Route::post('/quiz/submit/{id}', [quizController::class, 'quizsubmit'])->name('quizsubmit')->middleware('isstudentcheck');

@@ -21,7 +21,7 @@ class IsTeacherCheck
             return $next($request);
         }
 
-        // Return a proper response object instead of a string
-        return response("You are Not Teacher", 403); // 403 Forbidden status code
+        // Return the custom 403 error view
+        return response()->view('errors.403', [], 403);
     }
 }

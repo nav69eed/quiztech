@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<x-head :title="'QuizTech | Dashboard'"/>
+<x-head :title="'QuizTech | Dashboard'" />
 <link rel="stylesheet" href="{{ asset('webassets/css/studentdashboard.css') }}">
+
 <body>
+    <x-nav-bar-main :user="$user" />
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
@@ -41,11 +43,14 @@
 
             <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Student Dashboard</h1>
-                    <button class="btn btn-primary">
-                        <i class="fas fa-play me-2"></i> Start New Quiz
-                    </button>
+                    <a href="{{ route('allquiz') }}">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-play me-2"></i> Start New Quiz
+                        </button>
+                    </a>
                 </div>
 
                 <div class="row">
@@ -55,7 +60,7 @@
                                 <i class="fas fa-check-circle quiz-icon"></i>
                                 <div>
                                     <h3>Completed Quizzes</h3>
-                                    <p class="stat-number">15</p>
+                                    <p class="stat-number">{{ $attemptedQuizCount }}</p>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +71,7 @@
                                 <i class="fas fa-star quiz-icon"></i>
                                 <div>
                                     <h3>Average Score</h3>
-                                    <p class="stat-number">85%</p>
+                                    <p class="stat-number">{{ $averageScore }}%</p>
                                 </div>
                             </div>
                         </div>
@@ -89,22 +94,22 @@
                         <div class="widget">
                             <h3>Upcoming Quizzes</h3>
                             <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Math Quiz - Algebra
-                                    <span class="badge newbadge rounded-pill">Tomorrow</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Science Quiz - Biology
-                                    <span class="badge newbadge2 rounded-pill">In 3 days</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    History Quiz - Ancient Rome
-                                    <span class="badge bg-info rounded-pill">Next week</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    English Literature Quiz
-                                    <span class="badge bg-warning rounded-pill">In 2 weeks</span>
-                                </li>
+                                @forelse ($nearDueQuizzes as $nearquiz)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                       {{ $nearquiz->title }}
+                                        @if ($nearquiz->remaining_days == 0)
+                                        <span class="bg-danger px-2  rounded-pill">Today</span>
+                                        @elseif ($nearquiz->remaining_days == 1)
+                                        <span class="bg-info px-2 rounded-pill">Tomorrow</span>
+                                        @else
+                                        <span class="bg-success px-2 rounded-pill">{{ $nearquiz->remaining_days }} days left</span>
+                                        @endif
+                                    </li>
+                                @empty
+                                    <div class="conatiner-fluid">
+                                        No Quiz
+                                    </div>
+                                @endforelse
                             </ul>
                         </div>
                     </div>
@@ -112,42 +117,24 @@
                         <div class="widget">
                             <h3>Recent Performance</h3>
                             <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Physics Quiz</span>
-                                        <span>92%</span>
+                                @forelse ($attemptedQuiz as $quiz)
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>{{ $quiz->quiz_name }}</span>
+                                            <span>{{ $quiz->percentage_scored }}%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar"
+                                                style="width: {{ $quiz->percentage_scored }}%"
+                                                aria-valuenow="{{ $quiz->percentage_scored }}" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        </div>
+                                    </li>
+                                @empty
+                                    <div class="container-fluid">
+                                        No Quiz Yet
                                     </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 92%" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Geography Quiz</span>
-                                        <span>88%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 88%" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Chemistry Quiz</span>
-                                        <span>75%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Computer Science Quiz</span>
-                                        <span>95%</span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </li>
+                                @endforelse
                             </ul>
                         </div>
                     </div>
@@ -158,4 +145,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

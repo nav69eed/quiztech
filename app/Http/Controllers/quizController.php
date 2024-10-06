@@ -23,7 +23,8 @@ class quizController extends Controller
             'quizName' => 'required|min:4|max:30',
             'quizDescription' => 'required|min:10|max:100',
             'quizTimelimit' => 'required|integer|min:0',
-            'quizSubject' => 'required'
+            'quizSubject' => 'required',
+            'due_datetime' => 'required|date|after:today' // Add validation for due_datetime
         ]);
         // if ($validator->fails()) {
         //     return redirect('/createquiz')->withErrors($validator)
@@ -42,6 +43,7 @@ class quizController extends Controller
             'title' => $req->quizName,
             'description' => $req->quizDescription,
             'subject' => $req->quizSubject,
+            'due_datetime' => $req->due_datetime, // Add due_datetime to quizdata
             'id' => $uuid,
             'created_at' => now(), // Add created_at
             'updated_at' => now(), // Add updated_at
@@ -208,5 +210,54 @@ class quizController extends Controller
     {
         $user = User::find(session('loginID'));
         return view('createquiz', ['user' => $user]);
+    }
+
+    //return list of students
+    public function studentslist()
+    {
+        $user = User::find(session('loginID'));
+
+        // Fetch students and their average scores
+        $students = User::where('role', 'student')->get()->map(function ($student) {
+            $averageScore = AttemptedUser::where('user_id', $student->id)
+                ->avg('percentage_scored');
+
+            // Add count of quizzes attempted by the student
+            $attemptsCount = AttemptedUser::where('user_id', $student->id)
+                ->count();
+            return [
+                'name' => $student->name,
+                'user_id' => $student->id,
+                'email' => $student->email,
+                'average_score' => $averageScore,
+                'attempts_count' => $attemptsCount, // Added attempts count
+            ];
+        });
+
+        // return $students;
+        return view('studentlist', ['user' => $user, 'students' => $students]);
+    }
+
+    //display over due quizzes
+    public function displayoverduequizzes()
+    {
+        $overdueQuizzes = Quiz::where('due_datetime', '<', now())->get();
+        $user = User::find(session('loginID'));
+
+        // Calculate the total number of students
+        $totalStudents = User::where('role', 'student')->count();
+
+        // Calculate the completion rate for each overdue quiz
+        $completionRates = $overdueQuizzes->map(function ($quiz) use ($totalStudents) {
+            $attemptedCount = AttemptedUser::where('quiz_id', $quiz->id)->count();
+            $completionRate = $totalStudents > 0 ? ($attemptedCount / $totalStudents) * 100 : 0; // Calculate completion rate
+            return [
+                'quiz' => $quiz,
+                'completionRate' => $completionRate,
+            ];
+        });
+
+        // return $completionRates;
+        return view('overduequizzes', ['user' => $user, 'completionRates' => $completionRates]);
     }
 }
